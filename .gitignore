@@ -1,0 +1,28 @@
+# ===== ENV =====
+.env
+.env.*
+
+# ===== Python =====
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.pytest_cache/
+
+# ===== Virtual Environment =====
+venv/
+.venv/
+
+# ===== VSCode =====
+.vscode/
+
+# ===== Mac =====
+.DS_Store
+
+# ===== Logs =====
+*.log
+
+# ===== Build / Cache =====
+dist/
+build/
