@@ -1,6 +1,6 @@
-# 챗봇 비즈니스 로직: 프롬프트 조립 → LLM 호출 → 응답 반환
+# 챗봇 비즈니스 로직: 프롬프트 조립 → LLM 호출 → TTS → 응답 반환
 
-from . import client, prompt_builder
+from . import client, prompt_builder, tts_client
 from .schemas import ChatbotRequest, ChatbotResponse
 
 
@@ -21,8 +21,12 @@ def chat(req: ChatbotRequest) -> ChatbotResponse:
 
     result = client.generate(system_prompt, messages)
 
+    # TTS: 답변 텍스트 → 캐릭터 voice_id로 음성 생성 → base64
+    voice_id = tts_client.get_voice_id(req.character_id)
+    audio_base64 = tts_client.text_to_speech_base64(result["message"], voice_id)
+
     return ChatbotResponse(
         message=result["message"],
         temperature=result["temperature"],
-        audio_base64=None,
+        audio_base64=audio_base64,
     )
