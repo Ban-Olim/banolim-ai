@@ -38,20 +38,17 @@ def generate(
         model=model,
         messages=api_messages,
         temperature=temperature,
+        response_format={"type": "json_object"},
     )
     content = response.choices[0].message.content or ""
 
-    # JSON 추출 시도
-    # 응답 형식: {"message": "...", "temperature": N}
+    # JSON 추출
     message_text = content.strip()
     temperature_value = 0
     try:
-        start = content.find("{")
-        end = content.rfind("}")
-        if start != -1 and end > start:
-            obj = json.loads(content[start : end + 1])
-            message_text = obj.get("message", message_text)
-            temperature_value = int(obj.get("temperature", 0))
+        obj = json.loads(content)
+        message_text = obj.get("message", message_text)
+        temperature_value = int(obj.get("temperature", 0))
     except (json.JSONDecodeError, ValueError, TypeError):
         pass
 
