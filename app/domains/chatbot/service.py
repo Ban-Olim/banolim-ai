@@ -20,6 +20,13 @@ def chat(req: ChatbotRequest) -> ChatbotResponse:
     ]
 
     result = client.generate(system_prompt, messages)
+    
+    current = req.current_temperature
+    llm_temp = result["temperature"]
+    delta = llm_temp - current
+    allowed_deltas = [-3, 0, 5]
+    snapped_delta = min(allowed_deltas, key=lambda d: abs(d - delta))
+    new_temperature = max(0, min(100, current + snapped_delta))
 
     # TTS: 답변 텍스트 → 캐릭터 voice_id로 음성 생성 → base64
     voice_id = tts_client.get_voice_id(req.character_id)
@@ -27,6 +34,6 @@ def chat(req: ChatbotRequest) -> ChatbotResponse:
 
     return ChatbotResponse(
         message=result["message"],
-        temperature=result["temperature"],
+        temperature=new_temperature,
         audio_base64=audio_base64,
     )
