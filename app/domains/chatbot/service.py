@@ -21,12 +21,14 @@ def chat(req: ChatbotRequest) -> ChatbotResponse:
 
     result = client.generate(system_prompt, messages)
     
+    # 증감은 무조건 -3 또는 +5만 적용 (0이어도 +5)
     current = req.current_temperature
-    llm_temp = result["temperature"]
-    delta = llm_temp - current
-    allowed_deltas = [-3, 0, 5]
-    snapped_delta = min(allowed_deltas, key=lambda d: abs(d - delta))
-    new_temperature = max(0, min(100, current + snapped_delta))
+    delta = result["temperature"] - current
+    if delta < 0:
+        delta = -3
+    else:
+        delta = 5
+    new_temperature = max(0, min(100, current + delta))
 
     # TTS: 답변 텍스트 → 캐릭터 voice_id로 음성 생성 → base64
     voice_id = tts_client.get_voice_id(req.character_id)
