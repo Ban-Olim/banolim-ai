@@ -1,5 +1,5 @@
 # 문장 분해 system prompt 조립
-# suer_age, dificulty, count로 quiz.md 템플릿 읽고 치환
+# user_age, difficulty, count로 quiz.md 템플릿 읽고 치환
 
 from pathlib import Path
 
