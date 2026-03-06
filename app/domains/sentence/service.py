@@ -6,11 +6,11 @@ from pydantic_core import ValidationError
 from fastapi import HTTPException
 
 from . import client, prompt_builder, tts_client
-from .schemas import SentenceGenerateRequest, SentenceGenerateResponse, SentenceProblemModel, SentenceDecomposition
+from .schemas import SentenceRequest, SentenceResponse, SentenceProblemModel, SentenceDecomposition
 from typing import List, Dict, Any
 import json     
 
-def create_generate_sentence(req: SentenceGenerateRequest) -> SentenceGenerateResponse:
+def create_generate_sentence(req: SentenceRequest) -> SentenceResponse:
     
     # 프롬프트 조립
     try: 
@@ -48,4 +48,4 @@ def create_generate_sentence(req: SentenceGenerateRequest) -> SentenceGenerateRe
             status_code=500, 
             detail="AI가 반환한 문제들 중 유효한 형식의 문제가 하나도 없습니다."
         )
-    return SentenceGenerateResponse(problems=validated_problems)
+    return SentenceResponse(problems=validated_problems)
