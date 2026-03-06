@@ -39,7 +39,7 @@ def create_generate_sentence(req: SentenceRequest) -> SentenceResponse:
             validated_model = SentenceProblemModel(**problem_dict)
             validated_problems.append(validated_model)
         except ValidationError as e:
-            print(f"[경고] {index+1}번째 문제 파싱 실패. 해당 문제를 건너뜁니다: {e}")
+            print(f"[경고] {idx+1}번째 문제 파싱 실패. 해당 문제를 건너뜁니다: {e}")
             continue
 
     # 최소한 하나의 유효한 문제가 있어야 응답 반환

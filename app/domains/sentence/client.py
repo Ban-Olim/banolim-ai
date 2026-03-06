@@ -49,21 +49,9 @@ def generate_sentence(
         elif content.startswith("```"):
             content = content.strip("```").strip()
 
-        # 깔끔한 형태의 배열 추출
+        # {"problems": [...]} 형태로 파싱
         result_data = json.loads(content)
-
-        # 응답이 dict으로 올 경우를 대비한 방어 로직
-        if isinstance(result_data, dict):
-            for key, value in result_data.items():
-                if isinstance(value, list):
-                    return value
-            return [] # 리스트를 못 찾으면 빈 배열 반환
-        
-        # 응답이 리스트로 올 경우
-        if isinstance(result_data, list):
-            return result_data
-            
-        return []
+        return result_data.get("problems", [])
     
     except (json.JSONDecodeError, ValueError, TypeError) as e:
         print(f"JSON 파싱 오류: {e}")

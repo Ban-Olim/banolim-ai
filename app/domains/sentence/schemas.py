@@ -38,6 +38,10 @@ class SentenceProblemModel(BaseModel):
         ..., 
         description="해당 문장의 실제 난이도 (1-5)"
     )
+    targetAge: int = Field(
+        ..., 
+        description="해당 문장의 타겟 연령 (7-13)"
+    )
 
 # 3. 최종 API 응답 스키마 (문제들의 배열을 감싸는 래퍼)
 class SentenceResponse(BaseModel):
