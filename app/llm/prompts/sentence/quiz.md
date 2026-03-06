@@ -6,7 +6,7 @@
 ## 1. 입력값
 
 - **Age (연령):** {user_age} (7~13 사이의 정수)
-- **Difficulty (난이도):** {1~5}
+- **difficulty (난이도):** {difficulty}
 - **Count (생성 개수):** {count}
 
 ## 2. 대상 특성 (지능지수 71-84)
@@ -49,25 +49,27 @@
 - 외래어 남용 및 이중 부정 금지
 - 부정문 사용 금지. '하지 않았다', '없었다' 대신 '했다', '있었다' 등 긍정형 문장만 사용.
 - 4개의 Slot에 들어갈 수 없는 복잡한 관형절 중첩 금지
-- 마크다운 코드 블록(```json)이나 다른 부연 설명 일절 금지. 오직 JSON 배열만 출력할 것.
+- 마크다운 코드 블록(```json)이나 다른 부연 설명 일절 금지. 오직 JSON 객체만 출력할 것.
 
-## 5. 출력 형식 (Final JSON Specification)
+## 6. 출력 형식 (Final JSON Specification)
 
-반드시 아래 필드를 **모두 포함한** 객체들을 배열 `[]`에 담아 반환한다.
+반드시 아래 필드를 **모두 포함한** 객체들을 `"problems"` 키를 가진 JSON 객체에 담아 반환한다.
 
 ```json
-[
-    {
-        "sentence": "전체 문장 내용",
-        "hintLabels": ["Label1", "Label2", "Label3", "Label4"],
-        "decomposition": {
-            "slot1": "분해된 구절1",
-            "slot2": "분해된 구절2",
-            "slot3": "분해된 구절3",
-            "slot4": "분해된 구절4"
-        },
-        "difficulty": "{difficulty}",
-        "targetAge": "{user_age}"
-    }
-]
+{
+    "problems": [
+        {
+            "sentence": "전체 문장 내용",
+            "hintLabels": ["Label1", "Label2", "Label3", "Label4"],
+            "decomposition": {
+                "slot1": "분해된 구절1",
+                "slot2": "분해된 구절2",
+                "slot3": "분해된 구절3",
+                "slot4": "분해된 구절4"
+            },
+            "difficulty": {difficulty},
+            "targetAge": {user_age}
+        }
+    ]
+}
 ```
