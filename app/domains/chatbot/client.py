@@ -1,6 +1,6 @@
 
 # 챗봇 전용 OpenAI 클라이언트
-#CHATBOT_OPENAI_API_KEY를 사용해 채팅 완성 API를 호출하고, 응답에서 message/temperature를 반환하도록 함
+#OPENAI_API_KEY를 사용해 채팅 완성 API를 호출하고, 응답에서 message/temperature를 반환하도록 함
 
 import json
 import os
@@ -16,9 +16,9 @@ load_dotenv(_env_path)
 
 # OpenAI 클라이언트 생성 함수
 def _get_client() -> OpenAI:
-    api_key = os.getenv("CHATBOT_OPENAI_API_KEY")
+    api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
-        raise ValueError("CHATBOT_OPENAI_API_KEY가 설정되지 않았습니다. .env 파일을 확인하세요.")
+        raise ValueError("OPENAI_API_KEY가 설정되지 않았습니다. .env 파일을 확인하세요.")
     return OpenAI(api_key=api_key)
 
 # 채팅 완성 API 호출 함수
