@@ -5,7 +5,7 @@ from operator import index
 from pydantic_core import ValidationError
 from fastapi import HTTPException
 
-from . import client, prompt_builder, tts_client
+from . import client, prompt_builder
 from .schemas import SentenceRequest, SentenceResponse, SentenceProblemModel, SentenceDecomposition
 from typing import List, Dict, Any
 import json     

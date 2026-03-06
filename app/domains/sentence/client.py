@@ -21,7 +21,6 @@ def _get_client() -> OpenAI:
 
 def generate_sentence(
         system_prompt: str,
-        messages: list[dict],
         model: str = "gpt-4o-mini",
         temperature: float = 0.7,
 ) -> List[Dict[str, Any]]:
