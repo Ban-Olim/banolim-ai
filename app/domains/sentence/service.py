@@ -6,18 +6,28 @@ from pydantic_core import ValidationError
 from fastapi import HTTPException
 
 from . import client, prompt_builder
+from .vocab_gate import get_topic_words
 from .schemas import SentenceRequest, SentenceResponse, SentenceProblemModel, SentenceDecomposition
 from typing import List, Dict, Any
 import json     
 
+
 def create_generate_sentence(req: SentenceRequest) -> SentenceResponse:
     
+    # vocab_gate에서 user_age에 맞는 단어 20개 추출
+    try:
+        topic_words = get_topic_words(req.user_age)
+    except Exception as e:
+        print(f"단어 추출 오류: {e}")
+        raise ValueError("문제 생성에 필요한 단어를 준비하는 중 오류가 발생했습니다.")
+
     # 프롬프트 조립
     try: 
         system_prompt = prompt_builder.build_quiz_prompt(
         user_age=req.user_age,
         difficulty=req.difficulty,
         count=req.count,
+        topic_words=topic_words,
     )
     except Exception as e:
         print(f"프롬프트 조립 오류: {e}")
