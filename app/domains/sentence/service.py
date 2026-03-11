@@ -7,7 +7,7 @@ from fastapi import HTTPException
 
 from . import client, prompt_builder
 from .vocab_gate import get_topic_words
-from .schemas import SentenceRequest, SentenceResponse, SentenceProblemModel, SentenceDecomposition
+from .schemas import SentenceRequest, SentenceResponse, SentenceProblemModel, SlotModel
 from typing import List, Dict, Any
 import json     
 
