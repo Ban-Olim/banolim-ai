@@ -8,7 +8,6 @@ from typing import List, Dict, Any
 from dotenv import load_dotenv
 from openai import OpenAI
 
-# 프로젝트 루트의 .env 로드 (client.py → chatbot → domains → app → banolim-ai 이므로 4단계 상위)
 _env_path = Path(__file__).resolve().parents[3] / ".env"
 load_dotenv(_env_path)
 
