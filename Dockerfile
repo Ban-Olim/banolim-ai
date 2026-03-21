@@ -1,5 +1,5 @@
 # 1. 빌드 스테이지
-FROM python:3.9-slim AS builder
+FROM python:3.12-slim AS builder
 
 WORKDIR /app
 
@@ -37,4 +37,4 @@ COPY . .
 EXPOSE 8000
 
 # 프로젝트 구조에 맞춘 실행 명령어
-ENTRYPOINT ["uvicorn", "app.main:app", "—host", "0.0.0.0", "—port", "8000"]
+ENTRYPOINT ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
