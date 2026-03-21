@@ -8,9 +8,16 @@ from .schemas import SentenceRequest, SentenceResponse, SentenceProblemModel
 # RAG 예시로 사용할 문장 수 (생성할 문제 수의 몇 배를 가져올지)
 _RAG_SAMPLE_MULTIPLIER = 3
 
-# 나이를 레벨로 변환
+# 나이를 레벨로 변환 (7-8세→2, 9-10세→3, 11세→4, 12-13세→5)
 def _age_to_level(user_age: int) -> int:
-    return max(1, user_age - 6)
+    if user_age <= 8:
+        return 2
+    elif user_age <= 10:
+        return 3
+    elif user_age == 11:
+        return 4
+    else:
+        return 5
 
 # RAG 예시들을 번호 매겨서 문자열로 포맷팅
 def _format_rag_examples(sentences: list[str]) -> str:
