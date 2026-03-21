@@ -18,7 +18,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
 
 
 # 2. 실행 스테이지
-FROM python:3.9-slim
+FROM python:3.12-slim
 
 WORKDIR /app
 
