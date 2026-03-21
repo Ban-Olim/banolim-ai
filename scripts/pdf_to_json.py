@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env"))
 
-from pdf.service import extract_book
+from pdf_to_json.service import extract_book
 
 # PDF → JSON 변환 스크립트
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
