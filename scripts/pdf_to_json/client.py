@@ -19,7 +19,7 @@ def page_to_base64(page: fitz.Page, dpi: int = 150) -> str:
 # 페이지 이미지 → 문장 리스트
 def extract_sentences_from_page(b64_image: str, page_num: int) -> list[str]:
     response = _client.chat.completions.create(
-        model="gpt-4o",
+        model="gpt-4o-mini",
         messages=[
             {"role": "system", "content": build_extraction_prompt()},
             {
