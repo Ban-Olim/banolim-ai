@@ -33,3 +33,4 @@ scripts/data/json_in_db/
 scripts/data/used/
 scripts/data/**/*.pdf
 scripts/data/raw/
+test_tts.py

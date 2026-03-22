@@ -1,12 +1,12 @@
-## 요청 처리 → DB 조회 → 프롬프트 조립 → OpenAI 호출 → 응답 변환
+## 요청 처리 → DB 조회 → 프롬프트 조립 → OpenAI 호출 → TTS -> 응답 변환
 from pydantic_core import ValidationError
 from fastapi import HTTPException
 
-from . import client, prompt_builder, db_client
+from . import client, prompt_builder, db_client, tts_client
 from .schemas import SentenceRequest, SentenceResponse, SentenceProblemModel
 
 # RAG 예시로 사용할 문장 수 (생성할 문제 수의 몇 배를 가져올지)
-_RAG_SAMPLE_MULTIPLIER = 3
+_RAG_SAMPLE_MULTIPLIER = 2
 
 # 나이를 레벨로 변환 (7-8세→2, 9-10세→3, 11세→4, 12-13세→5)
 def _age_to_level(user_age: int) -> int:
@@ -23,6 +23,7 @@ def _age_to_level(user_age: int) -> int:
 def _format_rag_examples(sentences: list[str]) -> str:
     return "\n".join(f"{i + 1}. {s}" for i, s in enumerate(sentences))
 
+# 문장 생성 
 def create_generate_sentence(req: SentenceRequest) -> SentenceResponse:
 
     # DB에서 나이 수준에 맞는 문장 조회
@@ -62,7 +63,14 @@ def create_generate_sentence(req: SentenceRequest) -> SentenceResponse:
     for idx, problem_dict in enumerate(raw_problems):
         try:
             validated_model = SentenceProblemModel(**problem_dict)
+            
+            audio_base64 = tts_client.generate_sentence_audio_base64(
+                text=validated_model.sentence,
+                user_age=req.user_age
+            )
+            validated_model.sentence_audio_base64 = audio_base64
             validated_problems.append(validated_model)
+        
         except ValidationError as e:
             print(f"[경고] {idx+1}번째 문제 파싱 실패. 해당 문제를 건너뜁니다: {e}")
             continue

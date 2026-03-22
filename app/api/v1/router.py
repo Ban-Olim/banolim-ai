@@ -10,3 +10,4 @@ router = APIRouter()
 router.include_router(chatbot_router)
 router.include_router(wordbook_router)
 router.include_router(sentence_router)
+
