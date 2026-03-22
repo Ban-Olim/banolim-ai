@@ -1,6 +1,6 @@
 # 문장 분해 API 요청/응답 스키마 (Spring Boot ↔ FastAPI)
 from pydantic import BaseModel, Field
-from typing import List
+from typing import List, Optional
 
 # Spring Boot -> FastAPI 요청 body
 class SentenceRequest(BaseModel):
@@ -20,10 +20,8 @@ class SentenceProblemModel(BaseModel):
     slots: List[SlotModel]  
     options: List[str] 
     targetAge: int 
+    sentence_audio_base64: Optional[str] = None
 
 # 3. 최종 API 응답 스키마 (문제들의 배열을 감싸는 래퍼)
 class SentenceResponse(BaseModel):
-    problems: List[SentenceProblemModel] = Field(
-        ..., 
-        description="생성된 문장 분해 문제 리스트"
-    )
+    problems: List[SentenceProblemModel]
