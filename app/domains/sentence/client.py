@@ -1,52 +1,54 @@
-# 문장 분해 OPENAI_API_KEY를 사용함. 
-# 문장 분해 API를 호출하고, 응답에서 sentences 리스트를 반환하도록 함.
+ # 문장 분해 Claude API를 호출하고, 응답에서 sentences 리스트를 반환하도록 함.
 import json
 import os
 from pathlib import Path
 from typing import List, Dict, Any
+import anthropic
 
 from dotenv import load_dotenv
-from openai import OpenAI
 
 _env_path = Path(__file__).resolve().parents[3] / ".env"
 load_dotenv(_env_path)
 
-# OpenAI 클라이언트 생성 함수
-def _get_client() -> OpenAI:
-    api_key = os.getenv("OPENAI_API_KEY")
+# Claude 클라이언트 생성 함수
+def _get_client() -> anthropic.Anthropic:
+    api_key = os.getenv("CLAUDE_API_KEY")
     if not api_key:
-        raise ValueError("OPENAI_API_KEY가 설정되지 않았습니다. .env 파일을 확인하세요.")
-    return OpenAI(api_key=api_key)
+        raise ValueError("CLAUDE_API_KEY가 설정되지 않았습니다. .env 파일을 확인하세요.")
+    return anthropic.Anthropic(api_key=api_key)
 
 def generate_sentence(
         system_prompt: str,
-        model: str = "gpt-4o-mini",
+        user_input: str,
+        model: str = "claude-sonnet-4-6",
         temperature: float = 0.7,
 ) -> List[Dict[str, Any]]:
     
-    # OpenAI 클라이언트 + 메시지 생성
+    # Claude 클라이언트 + 메시지 생성
     client = _get_client()
-    api_messages = [
-        {"role": "system", "content": system_prompt},
-        {"role": "user", "content": "위 규칙에 맞게 문장 분해 문제 생성을 시작해줘."}
-    ]
+    content=""
 
     try:
-        response = client.chat.completions.create(
+        response = client.messages.create(
             model=model,
-            messages=api_messages,
+            max_tokens=2048,
             temperature=temperature,
-            response_format={"type": "json_object"},
-        )
+            system=system_prompt, 
+            messages=[
+        {
+            "role": "user",
+            "content": [{"type": "text", "text": user_input}]
+        }
+    ],
+)
         # 응답에서 content 추출
-        content = response.choices[0].message.content or "" 
+        content = response.content[0].text.strip()
 
         # JSON 추출 및 [] sentences 반환
-        content = content.strip()
         if content.startswith("```json"):
-            content = content.strip("```json").strip("```").strip()
+            content = content.replace("```json", "", 1).rsplit("```", 1)[0].strip()
         elif content.startswith("```"):
-            content = content.strip("```").strip()
+            content = content.replace("```", "", 1).rsplit("```", 1)[0].strip()
 
         # {"problems": [...]} 형태로 파싱
         result_data = json.loads(content)
@@ -57,5 +59,5 @@ def generate_sentence(
         print(f"원본 응답: {content}")
         return []
     except Exception as e:
-        print(f"OpenAI API 통신 에러: {e}")
+        print(f"Claude API 통신 에러: {e}")
         return []
