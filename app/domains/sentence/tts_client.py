@@ -18,14 +18,14 @@ TEACHER_VOICE_ID = "xmO7mipIuizS5mxGvKtD"
 
 # 레벨별 음성 설정 정의
 LOW_AGE_VOICE_SETTINGS = VoiceSettings(
-    stability=0.85,               # 목소리의 일관성 (높을수록 단정함)
+    stability=0.6,               # 목소리의 일관성 (높을수록 단정함)
     similarity_boost=0.75,        # 원본 목소리와의 유사도 (높을수록 원본과 비슷)
     style=0.5,                    # 감정 표현 정도 (0.0~1.0, 높을수록 감정적)
     use_speaker_boost=True        # 목소리 선명도 강화 
 ) #(7-10세)
 
 HIGH_AGE_VOICE_SETTINGS = VoiceSettings(
-    stability=0.70, 
+    stability=0.7, 
     similarity_boost=0.80, 
     style=0.1, 
     use_speaker_boost=True

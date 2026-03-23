@@ -1,4 +1,4 @@
-## 요청 처리 → DB 조회 → 프롬프트 조립 → OpenAI 호출 → TTS -> 응답 변환
+## 요청 처리 → DB 조회 → 프롬프트 조립 → Claude 호출(Caching) → TTS -> 응답 변환
 from pydantic_core import ValidationError
 from fastapi import HTTPException
 
@@ -31,6 +31,7 @@ def create_generate_sentence(req: SentenceRequest) -> SentenceResponse:
     fetch_count = min(req.count * _RAG_SAMPLE_MULTIPLIER, 30)
     try:
         sentences = db_client.get_sentences_by_level(level, fetch_count)
+        print(sentences)
     except Exception as e:
         print(f"DB 조회 오류: {e}")
         raise ValueError("문장 데이터를 가져오는 중 오류가 발생했습니다.")
@@ -41,17 +42,21 @@ def create_generate_sentence(req: SentenceRequest) -> SentenceResponse:
     # 프롬프트 조립
     try:
         rag_examples = _format_rag_examples(sentences)
-        system_prompt = prompt_builder.build_quiz_prompt(
+
+        system_rules, user_data = prompt_builder.build_quiz_prompt(
             user_age=req.user_age,
             count=req.count,
-            rag_examples=rag_examples,
+            rag_examples=rag_examples
         )
     except Exception as e:
         print(f"프롬프트 조립 오류: {e}")
         raise ValueError("프롬프트를 준비하는 중 오류가 발생했습니다.")
 
-    # OpenAI 호출
-    raw_problems = client.generate_sentence(system_prompt=system_prompt)
+    # Claude 호출
+    raw_problems = client.generate_sentence(
+        system_prompt=system_rules,
+        user_input=user_data
+    )
     if not raw_problems:
         raise HTTPException(
             status_code=500,
@@ -64,6 +69,7 @@ def create_generate_sentence(req: SentenceRequest) -> SentenceResponse:
         try:
             validated_model = SentenceProblemModel(**problem_dict)
             
+            # TTS 오디오 생성 및 base64 인코딩
             audio_base64 = tts_client.generate_sentence_audio_base64(
                 text=validated_model.sentence,
                 user_age=req.user_age
