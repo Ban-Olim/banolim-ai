@@ -10,9 +10,9 @@ load_dotenv(_env_path)
 
 # OpenAI 클라이언트 생성 함수
 def _get_client() -> OpenAI:
-    api_key = os.getenv("WORDBOOK_OPENAI_API_KEY") or os.getenv("CHATBOT_OPENAI_API_KEY")
+    api_key = os.getenv("WORDBOOK_OPENAI_API_KEY")
     if not api_key:
-        raise ValueError("WORDBOOK_OPENAI_API_KEY 또는 CHATBOT_OPENAI_API_KEY가 설정되지 않았습니다.")
+        raise ValueError("WORDBOOK_OPENAI_API_KEY가 설정되지 않았습니다.")
     return OpenAI(api_key=api_key)
 
 def generate(
