@@ -1,6 +1,6 @@
 fastapi==0.111.0
-openai
-python-dotenv
+openai==2.20.0
+python-dotenv==1.0.0
 uvicorn[standard]==0.30.1
 elevenlabs==2.35.0
 annotated-types==0.7.0
@@ -50,3 +50,4 @@ Unidecode==1.4.0
 Whoosh==2.7.4
 xlrd==1.2.0
 zipp==3.23.0
+anthropic
