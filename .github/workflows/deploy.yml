@@ -52,7 +52,10 @@ jobs:
                       # 4. FastAPI 구동에 필요한 환경변수 주입
                       export DOCKER_HUB_USERNAME=${{ secrets.DOCKER_HUB_USERNAME }}
                       export OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
-                      export ELEVENLABS_API_KEY=${{ secrets.ELEVENLABS_API_KEY }}
+                      export CHATBOT_ELEVENLABS_API_KEY=${{ secrets.CHATBOT_ELEVENLABS_API_KEY }}
+                      export SENTENCE_ELEVENLABS_API_KEY=${{ secrets.SENTENCE_ELEVENLABS_API_KEY }}
+                      export WORDBOOK_OPENAI_API_KEY=${{ secrets.WORDBOOK_OPENAI_API_KEY }}
+                      export CLAUDE_API_KEY=${{ secrets.CLAUDE_API_KEY }}
 
                       # 5. FastAPI 컨테이너 업데이트 (서비스 이름이 fastapi-ai가 맞는지 확인!)
                       docker compose pull fastapi-ai
