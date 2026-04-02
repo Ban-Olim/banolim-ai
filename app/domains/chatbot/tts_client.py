@@ -16,9 +16,9 @@ load_dotenv(_env_path)
 # 캐릭터 번호와 ElevenLabs voice_id 매핑
 CHARACTER_VOICE_IDS = {
     1: "8jHHF8rMqMlg8if2mOUe",  # 정수아
-    2: "Ml2fm7pJDDTZqQkeGpRM",  # 한지후 
-    3: "zgDzx5jLLCqEp6Fl7Kl7",  # 김민지 
-    4: "4JJwo477JUAx3HV0T7n7",  # 박성찬 
+    2: "Ir7oQcBXWiq4oFGROCfj",  # 한지후 
+    3: "uyVNoMrnUku1dZyVEXwD",  # 김민지 
+    4: "7cOBG34AiHrAzs842Rdi",  # 박성찬 
 }
 
 # ElevenLabs 클라이언트 생성
@@ -40,7 +40,17 @@ def text_to_speech_base64(text: str, voice_id: str) -> Optional[str]:
     if not text.strip() or not voice_id:
         return None
     client = _get_client()
-    audio = client.text_to_speech.convert(voice_id=voice_id, text=text)
+    audio = client.text_to_speech.convert(
+        voice_id=voice_id, 
+        text=text, 
+        model_id="eleven_multilingual_v2",
+        voice_settings={
+            "stability": 0.35,   
+            "similarity_boost": 0.8,
+            "style": 0.1,      
+            "use_speaker_boost": True 
+        }
+    )
     # 스트림/이터레이터면 bytes로 합침
     if hasattr(audio, "__iter__") and not isinstance(audio, bytes):
         chunks = list(audio)
