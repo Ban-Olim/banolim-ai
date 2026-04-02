@@ -7,6 +7,7 @@ from typing import Optional
 
 from dotenv import load_dotenv
 from elevenlabs.client import ElevenLabs
+from functools import lru_cache
 
 # .env 로드
 _env_path = Path(__file__).resolve().parents[3] / ".env"
@@ -21,6 +22,7 @@ CHARACTER_VOICE_IDS = {
 }
 
 # ElevenLabs 클라이언트 생성
+@lru_cache(maxsize=1)
 def _get_client() -> ElevenLabs:
     api_key = os.getenv("CHATBOT_ELEVENLABS_API_KEY")
     if not api_key:
