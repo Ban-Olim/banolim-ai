@@ -8,6 +8,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 from openai import OpenAI
+from functools import lru_cache
 
 # 프로젝트 루트의 .env 로드 (client.py → chatbot → domains → app → banolim-ai 이므로 4단계 상위)
 _env_path = Path(__file__).resolve().parents[3] / ".env"
@@ -15,6 +16,7 @@ load_dotenv(_env_path)
 
 
 # OpenAI 클라이언트 생성 함수
+@lru_cache(maxsize=1)
 def _get_client() -> OpenAI:
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
@@ -25,7 +27,7 @@ def _get_client() -> OpenAI:
 def generate(
     system_prompt: str,
     messages: list[dict],
-    model: str = "gpt-4o-mini",
+    model: str = "gpt-5.4-mini",
     temperature: float = 0.7,
 ) -> dict:
     
