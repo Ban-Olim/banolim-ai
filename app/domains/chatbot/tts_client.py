@@ -17,7 +17,7 @@ load_dotenv(_env_path)
 CHARACTER_VOICE_IDS = {
     1: "werYcNBv9EWrqICtBIlP",  # 정수아
     2: "nCcJ7qwEXOK93Q20w1m6",  # 한지후 
-    3: "FDRhdBo11lqjBqMNuAYC",  # 김민지 
+    3: "arUlfSCbG64oAVi0mIUg",  # 김민지 
     4: "9CmuGZqxPHxf74omFgK7",  # 박성찬 
 }
 
