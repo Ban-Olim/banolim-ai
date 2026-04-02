@@ -15,10 +15,10 @@ load_dotenv(_env_path)
 
 # 캐릭터 번호와 ElevenLabs voice_id 매핑
 CHARACTER_VOICE_IDS = {
-    1: "8jHHF8rMqMlg8if2mOUe",  # 정수아
-    2: "Ir7oQcBXWiq4oFGROCfj",  # 한지후 
-    3: "uyVNoMrnUku1dZyVEXwD",  # 김민지 
-    4: "7cOBG34AiHrAzs842Rdi",  # 박성찬 
+    1: "qQZfaH4ZrBjaOAzm1s5a",  # 정수아
+    2: "vWsdNebYU92MaN69Zb8E",  # 한지후 
+    3: "FDRhdBo11lqjBqMNuAYC",  # 김민지 
+    4: "9CmuGZqxPHxf74omFgK7",  # 박성찬 
 }
 
 # ElevenLabs 클라이언트 생성
@@ -43,11 +43,11 @@ def text_to_speech_base64(text: str, voice_id: str) -> Optional[str]:
     audio = client.text_to_speech.convert(
         voice_id=voice_id, 
         text=text, 
-        model_id="eleven_multilingual_v2",
+        model_id="eleven_turbo_v2_5",
         voice_settings={
-            "stability": 0.35,   
-            "similarity_boost": 0.8,
-            "style": 0.1,      
+            "stability": 0.38,   
+            "similarity_boost": 0.95,
+            "style": 0.15,      
             "use_speaker_boost": True 
         }
     )
