@@ -8,7 +8,6 @@ from .schemas import SentenceRequest, SentenceResponse, SentenceProblemModel
 # RAG 예시로 사용할 문장 수 (생성할 문제 수의 몇 배를 가져올지)
 _RAG_SAMPLE_MULTIPLIER = 2
 
-# 나이를 레벨로 변환 (7-8세→2, 9-10세→3, 11세→4, 12-13세→5)
 def _age_to_level(user_age: int) -> int:
     if user_age <= 8:
         return 2
@@ -19,27 +18,37 @@ def _age_to_level(user_age: int) -> int:
     else:
         return 5
 
-# RAG 예시들을 번호 매겨서 문자열로 포맷팅
 def _format_rag_examples(sentences: list[str]) -> str:
     return "\n".join(f"{i + 1}. {s}" for i, s in enumerate(sentences))
 
+# 커스텀 예외 메세지 생성
+def _get_error_response(message:str) -> SentenceResponse:
+    error_object = SentenceProblemModel(
+        sentence=message,
+        slots=[],
+        options=[],
+        targetAge=0,
+        sentence_audio_base64=""
+    )
+    return SentenceResponse(problems=[error_object])
+
 # 문장 생성 
 def create_generate_sentence(req: SentenceRequest) -> SentenceResponse:
-
-    # DB에서 나이 수준에 맞는 문장 조회
-    level = _age_to_level(req.user_age)
-    fetch_count = min(req.count * _RAG_SAMPLE_MULTIPLIER, 30)
+    # 1. DB 조회 단계 
     try:
+        level = _age_to_level(req.user_age)
+        fetch_count = min(req.count * _RAG_SAMPLE_MULTIPLIER, 30)
         sentences = db_client.get_sentences_by_level(level, fetch_count)
         print(sentences)
+
+        if not sentences:
+            return _get_error_response("나이에 맞는 문장 데이터를 찾을 수 없습니다.")
+            
     except Exception as e:
-        print(f"DB 조회 오류: {e}")
-        raise ValueError("문장 데이터를 가져오는 중 오류가 발생했습니다.")
+        print(f"[DB ERROR] {e}")
+        return _get_error_response("데이터베이스에서 문장을 가져오는 데 실패했습니다.")
 
-    if not sentences:
-        raise HTTPException(status_code=500, detail="해당 나이 수준의 문장 데이터가 없습니다.")
-
-    # 프롬프트 조립
+    # 2. 프롬프트 조립
     try:
         rag_examples = _format_rag_examples(sentences)
 
@@ -49,41 +58,52 @@ def create_generate_sentence(req: SentenceRequest) -> SentenceResponse:
             rag_examples=rag_examples
         )
     except Exception as e:
-        print(f"프롬프트 조립 오류: {e}")
-        raise ValueError("프롬프트를 준비하는 중 오류가 발생했습니다.")
+        print(f"[PROMPT ERROR] {e}")
+        return _get_error_response("문제 생성 프롬프트를 만드는 중 오류가 발생했습니다.")
 
-    # Claude 호출
-    raw_problems = client.generate_sentence(
-        system_prompt=system_rules,
-        user_input=user_data
-    )
-    if not raw_problems:
-        raise HTTPException(
-            status_code=500,
-            detail="AI가 문제 생성에 실패했거나 올바른 JSON을 반환하지 않았습니다."
+    # 3. Claude 호출
+    try:
+        raw_problems = client.generate_sentence(
+            system_prompt=system_rules,
+            user_input=user_data
         )
+        if not raw_problems:
+            raise ValueError("AI가 문제를 생성하지 않았습니다.")
 
-    # validation & 변환: raw_problems (List[Dict]) → List[SentenceProblemModel]
+    except Exception as e:
+        print(f"[AI ERROR] {e}")
+        return _get_error_response("현재 접속자가 너무 많아 AI가 답변을 고민하고 있어요! 잠시 후 다시 시도해주세요.")
+    except Exception as e:
+        print(f"[AI ERROR] {e}")
+        return _get_error_response("AI 서버와 연결이 원활하지 않습니다.")
+
+    # 4. 검증 및 TTS 생성
     validated_problems = []
-    for idx, problem_dict in enumerate(raw_problems):
-        try:
-            validated_model = SentenceProblemModel(**problem_dict)
+    try:
+        for idx, problem_dict in enumerate(raw_problems):
+            try:
+                validated_model = SentenceProblemModel(**problem_dict)
             
-            # TTS 오디오 생성 및 base64 인코딩
-            audio_base64 = tts_client.generate_sentence_audio_base64(
-                text=validated_model.sentence,
-                user_age=req.user_age
-            )
-            validated_model.sentence_audio_base64 = audio_base64
-            validated_problems.append(validated_model)
+                # TTS 오디오 생성 및 base64 인코딩
+                audio_base64 = tts_client.generate_sentence_audio_base64(
+                    text=validated_model.sentence,
+                    user_age=req.user_age
+                )
+                validated_model.sentence_audio_base64 = audio_base64
+                validated_problems.append(validated_model)
         
-        except ValidationError as e:
-            print(f"[경고] {idx+1}번째 문제 파싱 실패. 해당 문제를 건너뜁니다: {e}")
-            continue
+            except ValidationError as ve:
+                    print(f"[VALIDATION ERROR] {idx+1}번째 문제 형식이 맞지 않음: {ve}")
+                    continue
+            except Exception as te:
+                print(f"[TTS ERROR] {idx+1}번째 문제 음성 생성 실패: {te}")
+                continue
 
-    if not validated_problems:
-        raise HTTPException(
-            status_code=500,
-            detail="AI가 반환한 문제들 중 유효한 형식의 문제가 하나도 없습니다."
-        )
+        if not validated_problems:
+            return _get_error_response("유효한 문제를 생성하지 못했습니다. 다시 시도해 볼까요?")
+    
+    except Exception as e:
+        print(f"[FINAL PROCESS ERROR] {e}")
+        return _get_error_response("문장 처리 과정에서 예기치 못한 오류가 발생했습니다.")
+    
     return SentenceResponse(problems=validated_problems)
