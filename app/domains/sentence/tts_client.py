@@ -14,7 +14,7 @@ _env_path = Path(__file__).resolve().parents[3] / ".env"
 load_dotenv(_env_path)
 
 # 젊은 여성 교사 voice_id
-TEACHER_VOICE_ID = "xmO7mipIuizS5mxGvKtD"
+TEACHER_VOICE_ID = "5XV623hrsMG9uOKXQ6C5"
 
 # 레벨별 음성 설정 정의
 LOW_AGE_VOICE_SETTINGS = VoiceSettings(
