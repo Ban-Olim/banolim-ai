@@ -18,7 +18,7 @@ CHARACTER_VOICE_IDS = {
     1: "werYcNBv9EWrqICtBIlP",  # 정수아
     2: "nCcJ7qwEXOK93Q20w1m6",  # 한지후 
     3: "arUlfSCbG64oAVi0mIUg",  # 김민지 
-    4: "9CmuGZqxPHxf74omFgK7",  # 박성찬 
+    4: "DX0fq0OvTSygcbXYMr7l",  # 박성찬 
 }
 
 # ElevenLabs 클라이언트 생성
