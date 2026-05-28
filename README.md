@@ -2,148 +2,103 @@
 
 > 경계선 지능(BIF) 아동 및 초등학생을 위한 개인화 맞춤형 언어 교육 & 공감 소통 AI 엔진
 
+---
+
+## 목차
+
+1. [프로젝트 소개](#-프로젝트-소개)
+2. [팀 소개](#-팀-소개)
+3. [사용 기술 스택](#-사용-기술-스택)
+4. [기능](#-기능)
+
+---
+
+## 프로젝트 소개
+
 `banolim-ai`는 느린 학습자(경계선 지능 아동, Borderline Intellectual Functioning)와 초등학생의 어휘력, 문해력, 사회적 소통 능력 향상을 돕기 위해 개발되었습니다.
 
 본 엔진은 FastAPI 기반 서비스로 설계되었으며, 메인 백엔드(Spring Boot)와 연동되어 작동합니다. 멀티모달 비전 기술을 통한 교육 데이터 가공 파이프라인부터 LLM(GPT, Claude)과 TTS(ElevenLabs)를 융합하여 아동 인지 발달 단계에 맞춘 교육 콘텐츠를 실시간으로 생성합니다.
 
 ---
 
-## 핵심 기능 (Key Features)
+## 팀 소개
 
-### 1. 공감형 AI 캐릭터 챗봇 (`chatbot`)
+<table>
+  <tr>
+    <td align="center" width="230px">
+      <img src="https://github.com/gimn70009.png" width="120px" alt="gimn70009 Profile"/><br />
+      <br />
+      <a href="https://github.com/gimn70009"><b>gimn70009</b></a><br />
+      Backend Developer
+      <br />
+      <small>챗봇 / 문장분해 / 데이터 파이프라인</small>
+    </td>
+    <td align="center" width="230px">
+      <img src="https://github.com/youserlol.png" width="120px" alt="youserlol Profile"/><br />
+      <br />
+      <a href="https://github.com/youserlol"><b>youserlol</b></a><br />
+      Backend Developer
+      <br />
+      <small>챗봇 / 문장분해 / 데이터 파이프라인</small>
+    </td>
+    <td align="center" width="230px">
+      <img src="https://github.com/7hokerz.png" width="120px" alt="7hokerz Profile"/><br />
+      <br />
+      <a href="https://github.com/7hokerz"><b>7hokerz</b></a><br />
+      Backend Developer
+      <br />
+      <small>단어장 / 예문 생성</small>
+    </td>
+  </tr>
+</table>
+
+---
+
+## 사용 기술 스택
+
+### Backend
+
+![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white) ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white) ![Uvicorn](https://img.shields.io/badge/Uvicorn-4053D6?style=for-the-badge&logo=uvicorn&logoColor=white) ![Pydantic](https://img.shields.io/badge/Pydantic-E92063?style=for-the-badge&logo=pydantic&logoColor=white)
+
+### AI & Speech
+
+![Anthropic Claude](https://img.shields.io/badge/Anthropic%20Claude-191919?style=for-the-badge&logo=anthropic&logoColor=white) ![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white) ![ElevenLabs](https://img.shields.io/badge/ElevenLabs-1A1A1A?style=for-the-badge&logo=elevenlabs&logoColor=white)
+
+### Database
+
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+
+### Data Processing & Tools
+
+![PyMuPDF](https://img.shields.io/badge/PyMuPDF-FF6F00?style=for-the-badge&logo=pdf&logoColor=white) ![Tenacity](https://img.shields.io/badge/Tenacity-5A5A5A?style=for-the-badge&logo=python&logoColor=white)
+
+### Collaboration
+
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white) ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white) ![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white)
+
+---
+
+## 주요 기능
+
+### 1. 공감형 AI 캐릭터 챗봇
 
 - **4인 4색 캐릭터 페르소나**: 아동이 정서적 유대를 맺을 수 있는 고유한 성격과 목소리를 지닌 4가지 캐릭터 프로필을 지원합니다.
-- **실시간 마음 온도 시스템**: 대화 진행 상황에 따라 캐릭터의 감정을 나타내는 **마음 온도(0 ~ 100)**가 유기적으로 변화하며, 대화 분위기에 맞게 음성 톤과 답변 깊이가 조절됩니다.
+- **실시간 마음 온도 시스템**: 대화 진행 상황에 따라 캐릭터의 감정을 나타내는 마음 온도(0 ~ 100)가 유기적으로 변화하며, 대화 분위기에 맞게 음성 톤과 답변 깊이가 조절됩니다.
 - **연령별 어조 최적화**: 대화 상대방(아동)의 나이에 맞추어 자연스럽게 존댓말과 반말을 전환하며 상호작용합니다.
 - **TTS 음성 합성**: ElevenLabs와의 연동을 통해 각 캐릭터의 개성을 담은 음성을 제공합니다.
 
-### 2. UDL 기반 문장 분해 학습 생성기 (`sentence`)
+### 2. UDL 기반 문장 분해 학습 생성기
 
 - **보편적 학습 설계(UDL) 적용**: 글을 이해하는 데 어려움을 겪는 아동이 문장의 구조(주어, 목적어, 서술어, 수식어 등)를 파악할 수 있도록 퀴즈를 자동 생성합니다.
 - **연령별 레벨링 (Lv 2 ~ Lv 5)**: 7세 단문부터 13세 인과 접속 복합문까지 아동 인지 연령에 맞춰진 규칙을 적용하여 문장 난이도를 제어합니다.
 - **RAG(Retrieval-Augmented Generation) 연계**: 실제 교육 교재 및 동화책 데이터베이스로부터 문맥을 참조하여 예문을 추출합니다.
 - **슬롯 분석**: 조건절이 포함된 문장의 경우, 규칙에 따라 '경로 A(조건절 분할)' 혹은 '경로 B(조건절 단일)'를 판별하여 슬롯을 추출합니다.
 
-### 3. 초등 맞춤형 단어장 (`wordbook`)
+### 3. 초등 맞춤형 단어장
 
 - **어휘 직관화**: 단어와 품사, 사전적 정의를 입력받아 아동의 일상 어휘 범위 내에서 직관적으로 이해할 수 있는 맞춤형 예문과 어휘 설명을 생성합니다.
 
-### 4. 멀티모달 데이터 가공 및 파이프라인 (Data Pipeline)
+### 4. 멀티모달 데이터 가공 및 파이프라인
 
 - **Multimodal PDF Extractor**: 교재 PDF를 고해상도 이미지로 변환한 후 비전 LLM을 통해 도표, 깨진 글자 등을 제외하고 깨끗한 교육용 문장만 자동 정제 및 추출합니다.
 - **Database Ingestion**: 정제된 텍스트 데이터를 책(Book)의 레벨 단위로 분류하여 PostgreSQL 데이터베이스에 적재합니다.
-
----
-
-## 시스템 아키텍처 & 데이터 흐름 (System Architecture)
-
-### 1. 서비스 구성도
-
-```
-[클라이언트 (Frontend)]
-       │ (사용자 요청 / 응답)
-       ▼
-[메인 서버 (Spring Boot)]
-       │ (비동기 REST API 호출)
-       ▼
-[AI API 서버 (FastAPI)] ─── (RAG 문장 데이터 참조) ─── [PostgreSQL DB]
-       │
-       ├─► 챗봇 영역 (Chatbot) ──────► OpenAI + ElevenLabs
-       ├─► 문장 분해 (Sentence) ────► Anthropic + ElevenLabs
-       └─► 단어장 영역 (Wordbook) ──► OpenAI
-```
-
-### 2. 문장 분해 문제 실시간 생성 흐름 (Real-time RAG Pipeline)
-
-1.  **요청 수신**: 아동의 `나이`와 필요한 `문제 수` 정보를 수신합니다.
-2.  **연령 수준 매핑**: 아동 나이에 부합하는 독서 레벨(Level 2~5)을 매핑합니다.
-3.  **DB 샘플링 (RAG)**: 매핑된 레벨을 지닌 책들에서 문장들을 PostgreSQL에서 무작위로 추출하여 프롬프트의 지식 소스(Context)로 삼습니다.
-4.  **컨텍스트 조립**: 추출된 문장 예시들을 UDL 기반 퀴즈 출제 규칙 프롬프트와 병합합니다.
-5.  **구조화 문제 생성**: Claude가 규칙에 따라 JSON 형태(정답 슬롯, 힌트, 오답 옵션 등 포함) 문제를 생성합니다.
-6.  **음성 합성**: 생성된 핵심 문장을 아동의 나이에 알맞은 TTS 설정(안정성, 억양 등)을 바탕으로 교사 목소리의 음성 데이터로 합성합니다.
-7.  **최종 응답**: 문장 분석 문제 구조와 Base64 음성 데이터를 결합하여 전달합니다.
-
----
-
-## 도메인 심층 분석 (Domain Deep Dive)
-
-### 1. 공감형 AI 캐릭터 챗봇 (`chatbot`)
-
-본 엔진은 아동의 애착 형성 및 사회성 훈련을 위해 성격 프로필과 실시간 감정 반응 로직을 탑재했습니다.
-
-#### 캐릭터 프로필 정보
-
-| 번호  |    이름    | 나이 | 성격 페르소나 및 대화 특징                                                                                                                                        | 주요 관심사         |
-| :---: | :--------: | :--: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| **1** | **정수아** | 10세 | 소심하지만 따뜻함. 낯가림이 있어 처음엔 조심스럽게 말하다가 친해질수록 적극적으로 조소하고 질문함. 10세 이하에겐 반말, 11세 이상에겐 부드러운 존댓말 사용.        | 그림 그리기, 동화책 |
-| **2** | **한지후** | 12세 | 차분하고 이성적임. 규칙과 구체적 사실을 중시하며 감정 표현이 덤덤함. 왜 그렇게 생각하는지 이유를 묻는 경향이 있음. 12세 이하 반말, 13세 이상 존댓말.              | 퍼즐, 보드게임      |
-| **3** | **김민지** | 28세 | 따뜻하고 포용력 있는 초등학교 선생님. 아이를 재촉하지 않고 늘 부드럽게 공감하며 과정을 격려함. 문장 속에 "~"를 자연스럽게 포함. 19세 이하 반말, 20세 이상 존댓말. | 카페 투어, 독서     |
-| **4** | **박성찬** | 42세 | 든든하고 신뢰할 수 있는 삼촌. 현실적이고 명확한 행동 중심 조언을 줌. 무조건적인 꾸짖음 대신 실천 가능한 꿀팁 제안. 모든 연령에게 친근한 삼촌 반말 사용.           | 인생 조언, 경험담   |
-
-#### 마음 온도 작동 알고리즘
-
-캐릭터 챗봇은 대화가 시작되면 아동의 발화에 공감하고 반응한 정도를 계산하여 마음의 거리와 호감도를 **마음 온도(0°C ~ 100°C)**로 측정합니다.
-
-- **온도 상승 조건 (+5°C)**: 아동이 캐릭터의 취미(그림, 독서 등)를 먼저 물어보거나 따뜻하게 공감해 줄 때, 예의 바르고 솔직하게 고민을 이야기할 때.
-- **온도 하락 조건 (-3°C)**: 대화 상대를 무시하거나 차가운 단답, 성급한 재촉, 무례한 욕설, 비합리적인 핑계나 변명만을 늘어놓을 때.
-- **온도 유지 조건 (0°C)**: 일상적인 단순 질문이나 평이한 대화 진행 시.
-
----
-
-### 2. 문장 분해 학습 생성기 (`sentence`)
-
-경계선 지능 아동을 돕기 위해 구조적 언어학 규칙을 파운데이션 모델에 적용하여 작동합니다.
-
-#### 나이별 UDL 레벨 설계
-
-- **Lv 2 (7~8세)**: 기초 고유어로만 이루어진 4~5어절 이내의 단문. 한자어를 배제하고 시제는 현재형 또는 단순 과거형으로 고정합니다.
-- **Lv 3 (9~10세)**: 6~8어절 단문 또는 쉬운 어미(~하고, ~해서, ~하지만)가 연결된 2절 이내의 연결문.
-- **Lv 4 (11세)**: 8~10어절. 인과를 설명하는 단일 조건절(~하면, ~을수록) 또는 원인절(~해서, ~하니까)을 결합하여 조립하며, 이중 부정과 복합 보어는 배제합니다.
-- **Lv 5 (12~13세)**: 10어절 이상의 긴 복합문. 인과 접속 표현(~으로 인해, ~함에 따라)을 필수 적용하며, '주어+서술어+부사어+목적어'의 4대 성분이 포함되도록 하여 부사어 수식을 통해 인과관계를 인지할 수 있도록 유도합니다.
-
----
-
-### 3. 초등 맞춤형 단어장 (`wordbook`)
-
-단어와 뜻을 입력하면 초등학생의 어휘 및 경험 영역 내로 튜닝된 완전한 예시들을 생성합니다.
-
-- **어려운 설명 배제**: 추상적인 개념어를 초등 생활환경(학교, 놀이터, 가정 등)의 구체적인 상황을 예로 들어 자연스럽게 맥락화합니다.
-- **자동 검증**: 표제어(Lemma)가 생성된 예문 속에 변형 없이 원형 또는 알맞은 활용형으로 되도록 강제하는 프롬프트 필터링 장치가 부착되어 있습니다.
-
----
-
-## 데이터베이스 스키마 및 RAG 구성 (Database Design)
-
-RAG에 활용되는 도서 및 문장 데이터베이스는 PostgreSQL 기반으로 설계되었습니다.
-
-### 1. ERD 테이블 구조
-
-```
-+-----------------------------------+
-|               books               |
-+-----------------------------------+
-| book_id (VARCHAR, PK)             | <-----+
-| level (INTEGER)                   |       |
-+-----------------------------------+       | (Foreign Key)
-                                            |
-+-----------------------------------+       |
-|             sentences             |       |
-+-----------------------------------+       |
-| id (SERIAL, PK)                   |       |
-| book_id (VARCHAR, FK) ------------+-------+
-| level (INTEGER)                   |
-| idx (INTEGER)                     |
-| text (TEXT)                       |
-+-----------------------------------+
-```
-
----
-
-## 사용 기술 스택 (Tech Stack)
-
-- **Runtime & Framework**: `Python 3.12+` / `FastAPI`
-- **Database**: `PostgreSQL` / `psycopg2`
-- **AI Engine Clients**:
-  - `Anthropic Claude SDK` (문장 분해 규칙 기반 문제 생성)
-  - `OpenAI SDK` (챗봇 페르소나 상호작용, 단어장 예문 생성)
-  - `ElevenLabs SDK` (캐릭터 맞춤형 음성 합성)
