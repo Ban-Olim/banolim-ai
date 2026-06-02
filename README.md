@@ -157,7 +157,7 @@ Deploy
       <sub>Backend Developer</sub>
       <br />
       <br />
-      <span>챗봇 / 문장분해 / 데이터 파이프라인</span>
+      <span>챗봇 / 눈치코치 / 데이터 파이프라인</span>
     </td>
     <td align="center" width="220px">
       <a href="https://github.com/youserlol">
